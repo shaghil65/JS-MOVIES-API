@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <title>Title</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+</head>
+
+<body>
+    <div class="container">
+        <div class="row m-4">
+            <div class="col-2"></div>
+            <div class="col-8">
+                <input type="text" onkeyup="temp()" id="input" class="form-control">
+            </div>
+            <div class="col-2"></div>
+        </div>
+        <div id="movie_section"></div>
+    </div>
+
+    <script>
+        async function temp() {
+            let query = document.getElementById('input').value;
+            let api = `https://omdbapi.com/?apikey=5e7798b9&s=${query}`;
+
+            let response = await fetch(api);
+            let movies = await response.json();
+
+            if (movies.Response == "True") {
+                
+                let movie_section = document.getElementById('movie_section');
+                movie_section.innerHTML = '';
+                let row = document.createElement('div')
+                row.className = 'row m-4';
+
+                for (let i = 0; i < movies.Search.length; i++) {
+                    let title = movies.Search[i].Title;
+                    let year = movies.Search[i].Year;
+                    let poster = movies.Search[i].Poster;
+
+                    if(poster == 'N/A'){
+                        poster = '1.jpg';
+                    }
+                    let element = `
+                        <div class="col-md-4">
+                            <div class="card text-start"  style="height:400px">
+                                <img class="card-img-top" src=${poster} style="height:300px" alt="Title">
+                                <div class="card-body">
+                                    <h4 class="card-title">${title} - ${year}</h4>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    row.innerHTML += element;
+                    if ((i + 1) % 3 == 0 || i == movies.Search.length - 1) {
+                        movie_section.appendChild(row);
+                        row = document.createElement('div');
+                        row.className = 'row m-4';
+                    }
+                }
+            }
+        }
+    </script>
+
+</body>
+
+</html>
