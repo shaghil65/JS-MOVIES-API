@@ -55,11 +55,7 @@
                         </div>
                     `;
                     row.innerHTML += element;
-                    if ((i + 1) % 3 == 0 || i == movies.Search.length - 1) {
-                        movie_section.appendChild(row);
-                        row = document.createElement('div');
-                        row.className = 'row m-4';
-                    }
+                    movie_section.appendChild(row);
                 }
             }
         }
